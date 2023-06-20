@@ -4,9 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
+import { logIn, logOut } from "@redux/features/authSlice";
 // 1:13:46
 const Nav = () => {
   const { data: session } = useSession(); // i didn't understand
+  const dispatch = useDispatch();
 
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
@@ -17,6 +20,16 @@ const Nav = () => {
     };
     setUpProviders();
   }, []);
+
+  useEffect(() => {
+    if (session) {
+      const { user } = session;
+      dispatch(logIn(user.id));
+    } else {
+      dispatch(logOut());
+    }
+  }, [session]);
+
   return (
     <nav className="flex-between w-full mb-16 pt-3">
       <Link href="/" className="flex gap-2 flex-center">
