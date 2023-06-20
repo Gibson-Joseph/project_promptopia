@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
+import { useSelector } from "react-redux";
 import Profile from "@components/Profile";
 
 const MyProfile = () => {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const session_id = useSelector((state) => state.authPersistedReducer.id);
   const router = useRouter();
   const [posts, setPosts] = useState([]);
 
@@ -35,12 +36,12 @@ const MyProfile = () => {
 
   useEffect(() => {
     const fetchPost = async () => {
-      const response = await fetch(`/api/users/${session?.user.id}/posts`);
+      const response = await fetch(`/api/users/${session_id}/posts`);
       const data = await response.json();
       setPosts(data);
     };
 
-    if (session?.user.id) fetchPost();
+    if (session_id) fetchPost();
   }, []);
 
   return (
