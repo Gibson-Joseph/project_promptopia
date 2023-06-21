@@ -44,6 +44,17 @@ const MyProfile = () => {
     if (session_id) fetchPost();
   }, []);
 
+  useEffect(() => {
+    const fetchPost = async () => {
+      const response = await fetch("/api/prompt/test");
+      const data = await response.json();
+      // console.log("data", data);
+      // setPosts(data);
+      console.log("Profile_Posts", data);
+    };
+    fetchPost();
+  }, []);
+
   return (
     <Profile
       name="My"
